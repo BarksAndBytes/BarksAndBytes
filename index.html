@@ -53,6 +53,10 @@
 
 
 <script>
+	var regions = [];
+	var covidData;
+	var newCaseUS = 0;
+	var newDeathUS = 0;
 
     function prevDay(dateObject){
 	    dateObject.setTime(parseInt(dateObject.getTime())-24*60*60*1000);
@@ -61,21 +65,40 @@
 	function displayRegionData(region, newCases, newDeaths){
 		$("#regionData").html("<h1>" + region + "</h1><h3>" + requestDate + "</h3><p>New Cases: " + newCases + "<br>New Deaths: " + newDeaths + "</p>");
 	}
-	//var requestDate = "2020-12-21";//T00:00:00.000";
+	
+	function getCDCData(dateObject){
+		var requestDate = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+		
+		$.ajax({
+			url: "https://data.cdc.gov/resource/9mfq-cb36.json",
+			type: "GET",
+			data: {
+				"$limit" : 5000,
+				 "submission_date" : requestDate
+			}
+		}).done(function(data) {
+			covidData = data;
+		});
+	}
+	
 	
 	var d = new Date();
 	
-	prevDay(d);
-	
 	var requestDate = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
 	console.log(requestDate);
-	$("#test").text(requestDate);
+	$("#test").text(d.toJSON());
 	
-	var regions = [];
-	var covidData;
-	var newCaseUS = 0;
-	var newDeathUS = 0;
 	
+	getCDCData(d);
+	
+	/*
+	while(jQuery.isEmptyObject(covidData)){
+		prevDay(d);
+		getCDCData().done();
+	}
+	*/
+	
+	/*
 	$.ajax({
 		url: "https://data.cdc.gov/resource/9mfq-cb36.json",
 		type: "GET",
@@ -96,8 +119,14 @@
 		displayRegionData("US", newCaseUS, newDeathUS);
 		//console.log("US Total | " + requestDate + "\n - New Cases: " + newCaseUS + "\n - New Deaths: " + newDeathUS);
 	});
-	
-	
+	*/
+	$.each(data, function(i, stateData){
+		$("select#regionSelect").append('<option value="' + stateData.state + '">' + stateData.state + '</option>');
+		//console.log("State: " + stateData.state + "\n - New Cases: " + stateData.new_case + "\n - New Deaths: " + stateData.new_death);
+		newCaseUS += parseInt(stateData.new_case);
+		newDeathUS += parseInt(stateData.new_death);
+	});
+	displayRegionData("US", newCaseUS, newDeathUS);
 	
 	$("#regionSelect").change(function(e){
 		if(e.target.value == "all"){
