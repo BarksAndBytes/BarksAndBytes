@@ -55,7 +55,7 @@
 <script>
 
     function prevDay(dateObject){
-	    dateObject.setTime(dateObject.getTime()-24*60*60*1000);
+	    dateObject.setTime(parseInt(dateObject.getTime())-24*60*60*1000);
 	}
 	
 	function displayRegionData(region, newCases, newDeaths){
