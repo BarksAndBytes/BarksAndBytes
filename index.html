@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Covid Counter</title>
+	
+	<script src="jquery-3.5.1.min.js"></script>
+	<style>
+		header{
+			background: #333;
+			color: #fff;
+			padding: 20px;
+			text-align: center;
+			border-bottom: 4px #000 solid;
+			//margin-bottom: 10px;
+		}
+		body{
+			background: #f4f4f4;
+		}
+		#nav{
+			background:pink;
+			height: 25px;
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<h1>Covid Counter</h1>
+		
+		<div id="cases"></div>
+		<div id="deaths"></div>
+	
+	</header>
+	
+	<div id="nav">
+		
+	</div>
+	
+	<div id="dataSelector">
+		<form>
+			<label>Select Region:</label>
+			<select id="regionSelect">
+				<option value="all">All</option>
+			</select>
+		</form>
+	</div>
+	
+	<div id="regionData">
+		
+	</div>
+
+</body>
+
+
+<script>
+	//var requestDate = "2020-12-21";//T00:00:00.000";
+	
+	var d = new Date();
+	
+	var requestDate = d.getFullYear() + "-" + d.getMonth() + "-" + (parseInt(d.getDate())-1);
+	console.log(requestDate);
+	
+	var regions = [];
+	var covidData;
+	var newCaseUS = 0;
+	var newDeathUS = 0;
+	
+	$.ajax({
+		url: "https://data.cdc.gov/resource/9mfq-cb36.json",
+		type: "GET",
+		data: {
+			"$limit" : 5000,
+			 "submission_date" : requestDate
+		}
+	}).done(function(data) {
+		//console.log(data);
+		covidData = data;
+		
+		$.each(data, function(i, stateData){
+			$("select#regionSelect").append('<option value="' + stateData.state + '">' + stateData.state + '</option>');
+			//console.log("State: " + stateData.state + "\n - New Cases: " + stateData.new_case + "\n - New Deaths: " + stateData.new_death);
+			newCaseUS += parseInt(stateData.new_case);
+			newDeathUS += parseInt(stateData.new_death);
+		});
+		displayRegionData("US", newCaseUS, newDeathUS);
+		//console.log("US Total | " + requestDate + "\n - New Cases: " + newCaseUS + "\n - New Deaths: " + newDeathUS);
+	});
+	
+	function displayRegionData(region, newCases, newDeaths){
+		$("#regionData").html("<h1>" + region + "</h1>" + "<h3>" + requestDate + "</h3>" + "<p>New Cases: " + newCases + "<br>New Deaths: " + newDeaths + "</p>");
+	}
+	
+	$("#regionSelect").change(function(e){
+		if(e.target.value == "all"){
+			displayRegionData("US", newCaseUS, newDeathUS);
+		}
+		else{
+			$.each(covidData, function(i,stateData){
+				if(stateData.state == e.target.value){
+					//console.log(stateData.state + ": \n - New Cases: " + stateData.new_case + ": \n - New Deaths: " + stateData.new_death);
+					displayRegionData(stateData.state, stateData.new_case, stateData.new_death);
+				}
+			})
+		}
+		
+	});
+	
+	
+	
+</script>
+</html>
