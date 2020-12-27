@@ -53,6 +53,14 @@
 
 
 <script>
+
+    function prevDay(dateObject){
+	    dateObject.setTime(dateObject.getTime()-24*60*60*1000);
+	}
+	
+	function displayRegionData(region, newCases, newDeaths){
+		$("#regionData").html("<h1>" + region + "</h1>" + "<h3>" + requestDate + "</h3>" + "<p>New Cases: " + newCases + "<br>New Deaths: " + newDeaths + "</p>");
+	}
 	//var requestDate = "2020-12-21";//T00:00:00.000";
 	
 	var d = new Date();
@@ -86,9 +94,7 @@
 		//console.log("US Total | " + requestDate + "\n - New Cases: " + newCaseUS + "\n - New Deaths: " + newDeathUS);
 	});
 	
-	function displayRegionData(region, newCases, newDeaths){
-		$("#regionData").html("<h1>" + region + "</h1>" + "<h3>" + requestDate + "</h3>" + "<p>New Cases: " + newCases + "<br>New Deaths: " + newDeaths + "</p>");
-	}
+	
 	
 	$("#regionSelect").change(function(e){
 		if(e.target.value == "all"){
