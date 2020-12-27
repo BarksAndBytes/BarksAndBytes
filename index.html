@@ -33,7 +33,7 @@
 	</header>
 	
 	<div id="nav">
-		<p>Test</p>
+		<p id="test">Test</p>
 	</div>
 	
 	<div id="dataSelector">
@@ -69,6 +69,7 @@
 	
 	var requestDate = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate());
 	console.log(requestDate);
+	$("#test").text(requestDate);
 	
 	var regions = [];
 	var covidData;
