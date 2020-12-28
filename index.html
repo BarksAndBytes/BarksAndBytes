@@ -59,13 +59,17 @@
 	var newDeathUS = 0;
 	var d = new Date();
 	
+	function secondPer(num){
+		return 86400./num;
+	}
 
     function prevDay(dateObject){
 	    dateObject.setTime(parseInt(dateObject.getTime())-24*60*60*1000);
 	}
 	
 	function displayRegionData(region, newCases, newDeaths){
-		$("#regionData").html("<h1>" + region + "</h1><h3>" + d.toJSON().substring(0,10) + "</h3><p>New Cases: " + newCases + "<br>New Deaths: " + newDeaths + "</p>");
+	
+		$("#regionData").html("<h1>" + region + "</h1><h3>" + d.toJSON().substring(0,10) + "</h3><p>New Cases: " + newCases + " | every " + secondPer(newCases).toFixed(2) +  " seconds<br>New Deaths: " + newDeaths  + " | every " + secondPer(newDeaths).toFixed(2) +  " seconds</p>");
 	}
 	
 	function getCDCData(){
@@ -114,7 +118,7 @@
 				$.each(covidData, function(i,stateData){
 					if(stateData.state == e.target.value){
 						//console.log(stateData.state + ": \n - New Cases: " + stateData.new_case + ": \n - New Deaths: " + stateData.new_death);
-						displayRegionData(stateData.state, stateData.new_case, stateData.new_death);
+						displayRegionData(stateData.state, parseInt(stateData.new_case), parseInt(stateData.new_death));
 					}
 				})
 			}
