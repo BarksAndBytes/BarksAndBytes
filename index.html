@@ -17,7 +17,7 @@
 			background: #f4f4f4;
 		}
 		#nav{
-			background:pink;
+			background:gray;
 			height: 25px;
 		}
 	</style>
@@ -33,7 +33,7 @@
 	</header>
 	
 	<div id="nav">
-		<p id="test">Test2</p>
+		
 	</div>
 	
 	<div id="dataSelector">
@@ -148,8 +148,6 @@
 	
 	function main(){
 		getCDCData(d);
-		
-		$("#test").text(d.toJSON());
 		
 		$("#regionSelect").change(function(e){
 			if(e.target.value == "all"){
