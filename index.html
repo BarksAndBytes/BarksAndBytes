@@ -63,13 +63,54 @@
 		return 86400./num;
 	}
 
+	function timeAsString(time){
+		var hours;
+		var minutes;
+		var seconds;
+		
+		seconds = time % 60;
+		time = Math.floor(time / 60);
+		minutes = time % 60;
+		hours = Math.floor(time / 60);
+		
+		var output = "";
+		if(hours > 0){
+			output = output + hours + " hour";
+			if(hours != 1){
+				output = output + "s";
+			}
+		}
+		
+		if(minutes > 0){
+			if(output.length > 0){
+				output = output + ", " 
+			}
+			output = output + minutes + " minute";
+			if(minutes != 1){
+				output = output + "s";
+			}
+		}
+		
+		if(seconds > 0){
+			if(output.length > 0){
+				output = output + ", " 
+			}
+			output = output + seconds.toFixed(2) + " second";
+			if(seconds != 1){
+				output = output + "s";
+			}
+		}
+		
+		return output;
+	}
+
     function prevDay(dateObject){
 	    dateObject.setTime(parseInt(dateObject.getTime())-24*60*60*1000);
 	}
 	
 	function displayRegionData(region, newCases, newDeaths){
 	
-		$("#regionData").html("<h1>" + region + "</h1><h3>" + d.toJSON().substring(0,10) + "</h3><p>New Cases: " + newCases + " | every " + secondPer(newCases).toFixed(2) +  " seconds<br>New Deaths: " + newDeaths  + " | every " + secondPer(newDeaths).toFixed(2) +  " seconds</p>");
+		$("#regionData").html("<h1>" + region + "</h1><h3>" + d.toJSON().substring(0,10) + "</h3><p>New Cases: " + newCases + " | every " + timeAsString(secondPer(newCases)) +  "<br>New Deaths: " + newDeaths  + " | every " + timeAsString(secondPer(newDeaths)) +  "</p>");
 	}
 	
 	function getCDCData(){
