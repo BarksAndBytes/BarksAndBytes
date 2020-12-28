@@ -86,12 +86,17 @@
 			}
 			else{
 				$.each(data, function(i, stateData){
-					$("select#regionSelect").append('<option value="' + stateData.state + '">' + stateData.state + '</option>');
+					regions.push(stateData.state);
+					//$("select#regionSelect").append('<option value="' + stateData.state + '">' + stateData.state + '</option>');
 					
 					newCaseUS += parseInt(stateData.new_case);
 					newDeathUS += parseInt(stateData.new_death);
 				});
 				displayRegionData("US", newCaseUS, newDeathUS);
+				regions.sort();
+				$.each(regions, function(i, region){
+					$("select#regionSelect").append('<option value="' + region + '">' + region + '</option>');
+				});
 			}
 		});
 	}
