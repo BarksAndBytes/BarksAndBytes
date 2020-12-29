@@ -150,8 +150,8 @@
 		
 		console.log(Math.round(caseSec * 1000));
 		console.log(Math.round(deathSec * 1000));
-		caseInterval = setInterval(incrementCase(), Math.round(caseSec * 1000));
-		deathInterval = setInterval(incrementDeath(), Math.round(deathSec * 1000));
+		caseInterval = setInterval(incrementCase, Math.round(caseSec * 1000));
+		deathInterval = setInterval(incrementDeath, Math.round(deathSec * 1000));
 	}
 	
 	function getCDCData(){
