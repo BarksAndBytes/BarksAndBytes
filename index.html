@@ -18,7 +18,8 @@
 		}
 		#nav{
 			background:gray;
-			height: 25px;
+			padding: 5px;
+			//height: 25px;
 		}
 	</style>
 </head>
@@ -26,14 +27,15 @@
 <body>
 	<header>
 		<h1>Covid Counter</h1>
-		
-		<div id="cases"></div>
-		<div id="deaths"></div>
-	
 	</header>
 	
 	<div id="nav">
-		
+		<div id="cases">
+			<h3>New cases: 0</h3>
+		</div>
+		<div id="deaths">
+			<h3>New deaths: 0</h3>
+		</div>
 	</div>
 	
 	<div id="dataSelector">
@@ -68,25 +70,25 @@
 	function incrementCase(){
 		caseNum++;
 		console.log("Cases: " + caseNum);
-		//update html
+		$("#cases").html("<h3>New cases: " + caseNum + "</h3>");
 	}
 	
 	function resetCase(){
 		caseNum = 0;
 		console.log("Cases: " + caseNum);
-		//update html
+		$("#cases").html("<h3>New cases: " + caseNum + "</h3>");
 	}
 	
 	function incrementDeath(){
 		deathNum++;
 		console.log("Deaths: " + deathNum);
-		//update html
+		$("#deaths").html("<h3>New deaths: " + deathNum + "</h3>");
 	}
 	
 	function resetDeath(){
 		deathNum = 0;
 		console.log("Deaths: " + deathNum);
-		//update html
+		$("#deaths").html("<h3>New deaths: " + deathNum + "</h3>");
 	}
 	
 	function secondPer(num){
