@@ -144,10 +144,6 @@
 		
 		$("#regionData").html("<h1>" + region + "</h1><h3>" + d.toJSON().substring(0,10) + "</h3><p>New Cases: " + newCases + " | every " + timeAsString(caseSec) +  "<br>New Deaths: " + newDeaths  + " | every " + timeAsString(deathSec) +  "</p>");
 		
-		var test = setInterval(function(){
-			console.log("test");
-		}, 1000);
-		
 		console.log(Math.round(caseSec * 1000));
 		console.log(Math.round(deathSec * 1000));
 		caseInterval = setInterval(incrementCase, Math.round(caseSec * 1000));
