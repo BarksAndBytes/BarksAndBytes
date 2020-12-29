@@ -59,6 +59,36 @@
 	var newDeathUS = 0;
 	var d = new Date();
 	
+	var caseNum = 0;
+	var deathNum = 0;
+	
+	var caseInterval;
+	var deathInterval;
+	
+	function incrementCase(){
+		caseNum++;
+		console.log("Cases: " + caseNum);
+		//update html
+	}
+	
+	function resetCase(){
+		caseNum = 0;
+		console.log("Cases: " + caseNum);
+		//update html
+	}
+	
+	function incrementDeath(){
+		deathNum++;
+		console.log("Deaths: " + deathNum);
+		//update html
+	}
+	
+	function resetDeath(){
+		deathNum = 0;
+		console.log("Deaths: " + deathNum);
+		//update html
+	}
+	
 	function secondPer(num){
 		return 86400./num;
 	}
@@ -109,8 +139,19 @@
 	}
 	
 	function displayRegionData(region, newCases, newDeaths){
-	
-		$("#regionData").html("<h1>" + region + "</h1><h3>" + d.toJSON().substring(0,10) + "</h3><p>New Cases: " + newCases + " | every " + timeAsString(secondPer(newCases)) +  "<br>New Deaths: " + newDeaths  + " | every " + timeAsString(secondPer(newDeaths)) +  "</p>");
+		var caseSec = secondPer(newCases);
+		var deathSec = secondPer(newDeaths);
+		
+		$("#regionData").html("<h1>" + region + "</h1><h3>" + d.toJSON().substring(0,10) + "</h3><p>New Cases: " + newCases + " | every " + timeAsString(caseSec) +  "<br>New Deaths: " + newDeaths  + " | every " + timeAsString(deathSec) +  "</p>");
+		
+		var test = setInterval(function(){
+			console.log("test");
+		}, 1000);
+		
+		console.log(Math.round(caseSec * 1000));
+		console.log(Math.round(deathSec * 1000));
+		caseInterval = setInterval(incrementCase(), Math.round(caseSec * 1000));
+		deathInterval = setInterval(incrementDeath(), Math.round(deathSec * 1000));
 	}
 	
 	function getCDCData(){
@@ -150,6 +191,11 @@
 		getCDCData(d);
 		
 		$("#regionSelect").change(function(e){
+			clearInterval(caseInterval);
+			clearInterval(deathInterval);
+			resetCase();
+			resetDeath();
+			
 			if(e.target.value == "all"){
 				displayRegionData("US", newCaseUS, newDeathUS);
 			}
@@ -161,7 +207,6 @@
 					}
 				})
 			}
-			
 		});
 	}
 	
