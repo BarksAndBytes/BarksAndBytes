@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Covid Counter</title>
+	
+	<script src="jquery-3.5.1.min.js"></script>
+	<style>
+		header{
+			background: #333;
+			color: #fff;
+			padding: 20px;
+			text-align: center;
+			border-bottom: 4px #000 solid;
+			//margin-bottom: 10px;
+		}
+		body{
+			background: #f4f4f4;
+		}
+		#nav{
+			background:gray;
+			padding: 5px;
+			//height: 25px;
+		}
+		#regionData{
+			background: #ffffff;
+			color: #000
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<h1>Covid Counter</h1>
+	</header>
+	
+	<div id="nav">
+		<div id="cases">
+			<h3>New cases: 0</h3>
+		</div>
+		<div id="deaths">
+			<h3>New deaths: 0</h3>
+		</div>
+	</div>
+	
+	<div id="dataSelector">
+		<form>
+			<label>Select Region:</label>
+			<select id="regionSelect">
+				<option value="all">All</option>
+			</select>
+		</form>
+	</div>
+	
+	<div id="regionData">
+		
+	</div>
+
+</body>
+
+
+<script>
+	var regions = [];
+	var covidData;
+	var newCaseUS = 0;
+	var newDeathUS = 0;
+	var d = new Date();
+	
+	var caseNum = 0;
+	var deathNum = 0;
+	
+	var caseInterval;
+	var deathInterval;
+	
+	function incrementCase(){
+		caseNum++;
+		console.log("Cases: " + caseNum);
+		$("#cases").html("<h3>New cases: " + caseNum + "</h3>");
+	}
+	
+	function resetCase(){
+		caseNum = 0;
+		console.log("Cases: " + caseNum);
+		$("#cases").html("<h3>New cases: " + caseNum + "</h3>");
+	}
+	
+	function incrementDeath(){
+		deathNum++;
+		console.log("Deaths: " + deathNum);
+		$("#deaths").html("<h3>New deaths: " + deathNum + "</h3>");
+	}
+	
+	function resetDeath(){
+		deathNum = 0;
+		console.log("Deaths: " + deathNum);
+		$("#deaths").html("<h3>New deaths: " + deathNum + "</h3>");
+	}
+	
+	function secondPer(num){
+		return 86400./num;
+	}
+
+	function timeAsString(time){
+		var hours;
+		var minutes;
+		var seconds;
+		
+		seconds = time % 60;
+		time = Math.floor(time / 60);
+		minutes = time % 60;
+		hours = Math.floor(time / 60);
+		
+		var output = "";
+		if(hours > 0){
+			output = output + hours + " hour";
+			if(hours != 1){
+				output = output + "s";
+			}
+		}
+		
+		if(minutes > 0){
+			if(output.length > 0){
+				output = output + ", " 
+			}
+			output = output + minutes + " minute";
+			if(minutes != 1){
+				output = output + "s";
+			}
+		}
+		
+		if(seconds > 0){
+			if(output.length > 0){
+				output = output + ", " 
+			}
+			output = output + seconds.toFixed(2) + " second";
+			if(seconds != 1){
+				output = output + "s";
+			}
+		}
+		
+		return output;
+	}
+
+    function prevDay(dateObject){
+	    dateObject.setTime(parseInt(dateObject.getTime())-24*60*60*1000);
+	}
+	
+	function displayRegionData(region, newCases, newDeaths){
+		var caseSec = secondPer(newCases);
+		var deathSec = secondPer(newDeaths);
+		
+		$("#regionData").html("<h1>" + region + "</h1><h3>" + d.toJSON().substring(0,10) + "</h3><p>New Cases: " + newCases + " | every " + timeAsString(caseSec) +  "<br>New Deaths: " + newDeaths  + " | every " + timeAsString(deathSec) +  "</p>");
+		
+		//console.log(Math.round(caseSec * 1000));
+		//console.log(Math.round(deathSec * 1000));
+		
+		if(newCases != 0){caseInterval = setInterval(incrementCase, Math.round(caseSec * 1000));}
+		
+		if(newDeaths != 0){deathInterval = setInterval(incrementDeath, Math.round(deathSec * 1000));}
+	}
+	
+	function getCDCData(){
+		$.ajax({
+			url: "https://data.cdc.gov/resource/9mfq-cb36.json",
+			type: "GET",
+			data: {
+				"$limit" : 5000,
+				 "submission_date" : d.toJSON().substring(0,10)
+			}
+		}).done(function(data) {
+			covidData = data;
+			
+			if(jQuery.isEmptyObject(data)){
+				prevDay(d);
+				
+				getCDCData();
+			}
+			else{
+				$.each(data, function(i, stateData){
+					regions.push(stateData.state);
+					//$("select#regionSelect").append('<option value="' + stateData.state + '">' + stateData.state + '</option>');
+					
+					newCaseUS += parseInt(stateData.new_case);
+					newDeathUS += parseInt(stateData.new_death);
+				});
+				displayRegionData("US", newCaseUS, newDeathUS);
+				regions.sort();
+				$.each(regions, function(i, region){
+					$("select#regionSelect").append('<option value="' + region + '">' + region + '</option>');
+				});
+			}
+		});
+	}
+	
+	function main(){
+		getCDCData(d);
+		
+		$("#regionSelect").change(function(e){
+			clearInterval(caseInterval);
+			clearInterval(deathInterval);
+			resetCase();
+			resetDeath();
+			
+			if(e.target.value == "all"){
+				displayRegionData("US", newCaseUS, newDeathUS);
+			}
+			else{
+				$.each(covidData, function(i,stateData){
+					if(stateData.state == e.target.value){
+						//console.log(stateData.state + ": \n - New Cases: " + stateData.new_case + ": \n - New Deaths: " + stateData.new_death);
+						displayRegionData(stateData.state, parseInt(stateData.new_case), parseInt(stateData.new_death));
+					}
+				})
+			}
+		});
+	}
+	
+	main();
+	
+	
+</script>
+</html>
