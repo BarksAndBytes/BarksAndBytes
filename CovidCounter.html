@@ -20,33 +20,34 @@
 </head>
 
 <body>
-	<div>
-		<header>
-			<h1>Covid Counter</h1>
-		</header>
-		
-		<div id="nav">
-			<div id="cases">
-				<h3>New cases: 0</h3>
-			</div>
-			<div id="deaths">
-				<h3>New deaths: 0</h3>
-			</div>
-		</div>
-		
-		<div id="dataSelector">
-			<form>
-				<label>Select Region:</label>
-				<select id="regionSelect">
-					<option value="all">All</option>
-				</select>
-			</form>
-		</div>
-		
-		<div id="regionData">
+	<div id="pageContainer">
+		<div id="contentWrap">
+			<header>
+				<h1>Covid Counter</h1>
+			</header>
 			
-		</div>
-		
+			<div id="nav">
+				<div id="cases">
+					<h3>New cases: 0</h3>
+				</div>
+				<div id="deaths">
+					<h3>New deaths: 0</h3>
+				</div>
+			</div>
+			
+			<div id="dataSelector">
+				<form>
+					<label>Select Region:</label>
+					<select id="regionSelect">
+						<option value="all">All</option>
+					</select>
+				</form>
+			</div>
+			
+			<div id="regionData">
+				
+			</div>
+		</div>		
 		<footer id="footer">
 			<p>The data shown is from the <a href="https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data/vbim-akqf">CDC</a>. Regions shown are pulled from the CDC data directly, and include the 50 states, New York City, Washington DC, and other locations of notable outbreaks over the course of the pandemic.</p>
 			<h3>Stay safe. Wear a mask. </h3>
