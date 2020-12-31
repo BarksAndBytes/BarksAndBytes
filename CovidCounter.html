@@ -71,25 +71,21 @@
 	
 	function incrementCase(){
 		caseNum++;
-		console.log("Cases: " + caseNum);
 		$("#cases").html("<h3>New cases: " + caseNum + "</h3>");
 	}
 	
 	function resetCase(){
 		caseNum = 0;
-		console.log("Cases: " + caseNum);
 		$("#cases").html("<h3>New cases: " + caseNum + "</h3>");
 	}
 	
 	function incrementDeath(){
 		deathNum++;
-		console.log("Deaths: " + deathNum);
 		$("#deaths").html("<h3>New deaths: " + deathNum + "</h3>");
 	}
 	
 	function resetDeath(){
 		deathNum = 0;
-		console.log("Deaths: " + deathNum);
 		$("#deaths").html("<h3>New deaths: " + deathNum + "</h3>");
 	}
 	
@@ -148,9 +144,6 @@
 		
 		$("#regionData").html("<h1>" + region + "</h1><h3>" + d.toJSON().substring(0,10) + "</h3><p>New Cases: " + newCases + " | every " + timeAsString(caseSec) +  "<br>New Deaths: " + newDeaths  + " | every " + timeAsString(deathSec) +  "</p>");
 		
-		//console.log(Math.round(caseSec * 1000));
-		//console.log(Math.round(deathSec * 1000));
-		
 		if(newCases != 0){caseInterval = setInterval(incrementCase, Math.round(caseSec * 1000));}
 		
 		if(newDeaths != 0){deathInterval = setInterval(incrementDeath, Math.round(deathSec * 1000));}
@@ -204,7 +197,6 @@
 			else{
 				$.each(covidData, function(i,stateData){
 					if(stateData.state == e.target.value){
-						//console.log(stateData.state + ": \n - New Cases: " + stateData.new_case + ": \n - New Deaths: " + stateData.new_death);
 						displayRegionData(stateData.state, parseInt(stateData.new_case), parseInt(stateData.new_death));
 					}
 				})
