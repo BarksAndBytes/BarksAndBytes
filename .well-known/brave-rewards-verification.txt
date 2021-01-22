@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: lammyb0y.github.io
+Token: c7599a38fea501126653bc616d29539a987e8f413ff1ed88047565f17ee2d455
